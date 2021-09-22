@@ -14,6 +14,7 @@ finish-args:
   - --share=network
   - --device=dri
   - --own-name=org.mpris.MediaPlayer2.youtubemusic
+  - --filesystem=xdg-run/app/com.discordapp.Discord:create
 modules:
   - name: ytmdesktop
     buildsystem: simple
@@ -52,6 +53,9 @@ modules:
       - type: script
         dest-filename: start-ytmdesktop.sh
         commands:
+          - for i in {0..9}; do
+          -     test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+          - done
           - export TMPDIR=$XDG_RUNTIME_DIR/app/$FLATPAK_ID
           - FLATPAK_HOST=1 zypak-wrapper.sh /app/ytmdesktop/youtube-music-desktop-app "$@"
       - type: file
