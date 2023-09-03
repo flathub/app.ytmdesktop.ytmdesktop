@@ -16,6 +16,7 @@ finish-args:
   - --device=dri
   - --own-name=org.mpris.MediaPlayer2.youtubemusic
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
+  - --filesystem=xdg-run/discord-ipc-0
 modules:
   - name: ytmdesktop
     buildsystem: simple
