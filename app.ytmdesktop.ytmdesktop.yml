@@ -1,66 +1,80 @@
 app-id: app.ytmdesktop.ytmdesktop
 runtime: org.freedesktop.Platform
-runtime-version: '21.08'
+runtime-version: &runtime-version '23.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
-base-version: '21.08'
-command: start-ytmdesktop.sh
+base-version: *runtime-version
+command: start-ytmdesktop
 separate-locales: false
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.node16
 finish-args:
+  # Share IPC namespace with the host, without it the X11 shared memory extension will not work.
   - --share=ipc
-  - --socket=x11
-  - --socket=pulseaudio
+  # Allow access to the network.
   - --share=network
+  # Show windows using Wayland with a fallback to Xorg.
+  - --socket=wayland
+  - --socket=fallback-x11
+  # Pulseaudio for audio.
+  - --socket=pulseaudio
+  # Required for hardware acceleration.
   - --device=dri
-  - --own-name=org.mpris.MediaPlayer2.youtubemusic
+  # Allow access to MPRIS controls.
+  # Broken until https://github.com/ytmdesktop/ytmdesktop/pull/1359 is merged upstream.
+  - --own-name=org.mpris.MediaPlayer2.ytmdesktop
+  # Allow talking to discord socket.
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
 modules:
   - name: ytmdesktop
     buildsystem: simple
-    build-options:
-      append-path: /usr/lib/sdk/node14/bin
-      env:
-        NPM_CONFIG_LOGLEVEL: info
-        XDG_CACHE_HOME: /run/build/ytmdesktop/flatpak-node/cache
-        npm_config_cache: /run/build/ytmdesktop/flatpak-node/npm-cache
-        npm_config_nodedir: /usr/lib/sdk/node14
-        npm_config_offline: 'true'
-        ELECTRON_CACHE: /run/build/ytmdesktop/flatpak-node/electron-cache
-        ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
     build-commands:
-      - npm install --offline
-      - npm run build:lin --linux --dir
-      - cp -a dist/linux*unpacked /app/ytmdesktop
-      - install -Dm755 -t /app/bin/ ./start-ytmdesktop.sh
-      - install -D -t /app/share/applications/ app.ytmdesktop.ytmdesktop.desktop
-      - install -D -t /app/share/metainfo/ app.ytmdesktop.ytmdesktop.metainfo.xml
-    post-install:
-      - install -Dm644 src/assets/favicon.16x16.png /app/share/icons/hicolor/16x16/apps/$FLATPAK_ID.png  
-      - install -Dm644 src/assets/favicon.256x256.png /app/share/icons/hicolor/256x256/apps/$FLATPAK_ID.png 
-      - install -Dm644 src/assets/favicon.512x512.png /app/share/icons/hicolor/512x512/apps/$FLATPAK_ID.png
+      # Extract debian package.
+      - bsdtar --to-stdout -xf youtube-music-desktop-app_*.deb data.* | bsdtar --strip-components 2 -xf -
+      # Copy extracted bin and data directories to the deployment location.
+      - cp -r lib/* ${FLATPAK_DEST}/lib
+      - cp -r share/* ${FLATPAK_DEST}/share/
+      # Cleanup upstream desktop file and pixmaps folder.
+      - rm ${FLATPAK_DEST}/share/applications/*
+      - rm -rf ${FLATPAK_DEST}/share/pixmaps
+      # Install upstream icon correctly.
+      - install -Dm644 share/pixmaps/youtube-music-desktop-app.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png
+      # Install Flatpak specific wrapper.
+      - install -Dm755 start-ytmdesktop.sh ${FLATPAK_DEST}/bin/start-ytmdesktop
+      # Install Flatpak specific metainfo and desktop files.
+      - install -Dm644 app.ytmdesktop.ytmdesktop.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - install -Dm644 app.ytmdesktop.ytmdesktop.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
     sources:
-      - type: git
-        url: https://github.com/ytmdesktop/ytmdesktop.git
-        tag: v1.13.0
-        commit: e4c5e308e345765fb7e42d149bb4abf39f7ae4bd
-      - type: patch
-        paths:
-          # pr open on upstream for all 3
-          - patches/0001-don-t-hard-code-cache-in-electron-build-config.patch
-          - patches/0002-set-target-for-config.patch
-          - patches/0003-disable-autoupdate-if-running-in-flatpak.patch
+      - type: file
+        only-arches:
+          - x86_64
+        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.5/youtube-music-desktop-app_2.0.5_amd64.deb
+        sha512: 75e329f2c758b218d31323c477a98eacac75aba85cf61960e344ff535d52a2769122c54db09ff2c82fb6c6461f23849ea5c3ba16cc8922a03fc1c323baa46441
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/ytmdesktop/ytmdesktop/releases/latest
+          version-query: .tag_name
+          url-query: .assets[] | select(.name|endswith("_amd64.deb")) | .browser_download_url
+      - type: file
+        only-arches:
+          - aarch64
+        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.5/youtube-music-desktop-app_2.0.5_arm64.deb
+        sha512: e569e5bdf1cde30a47c94ac5914793bffb7b1d589f370e3c8881c5f25b47cce4fb897c0cb6108f12e933e3c03db1324d5af9ce06a1438988df864e57686d699d
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/ytmdesktop/ytmdesktop/releases/latest
+          version-query: .tag_name
+          url-query: .assets[] | select(.name|endswith("_arm64.deb")) | .browser_download_url
       - type: script
         dest-filename: start-ytmdesktop.sh
         commands:
-          - for i in {0..9}; do
-          -     test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-          - done
           - export TMPDIR=$XDG_RUNTIME_DIR/app/$FLATPAK_ID
-          - FLATPAK_HOST=1 zypak-wrapper.sh /app/ytmdesktop/youtube-music-desktop-app "$@"
+          - WAYLAND_SOCKET=${WAYLAND_DISPLAY:-"wayland-0"}
+          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}" ]] then
+          - FLAGS="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
+          - fi
+          - FLATPAK_HOST=1 zypak-wrapper.sh /app/lib/youtube-music-desktop-app/youtube-music-desktop-app $FLAGS "$@"
       - type: file
         path: app.ytmdesktop.ytmdesktop.desktop
       - type: file
         path: app.ytmdesktop.ytmdesktop.metainfo.xml
-      - generated-sources.json
+    cleanup:
+      # Add bad future files here.
