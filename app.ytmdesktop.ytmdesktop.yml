@@ -74,8 +74,11 @@ modules:
           - export TMPDIR=$XDG_RUNTIME_DIR/app/$FLATPAK_ID
           - WAYLAND_SOCKET=${WAYLAND_DISPLAY:-"wayland-0"}
           - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}" ]] then
-          - FLAGS="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
+          -    FLAGS="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
           - fi
+          - for i in {0..9}; do
+          -    test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+          - done
           - FLATPAK_HOST=1 zypak-wrapper.sh /app/lib/youtube-music-desktop-app/youtube-music-desktop-app $FLAGS "$@"
       - type: file
         path: app.ytmdesktop.ytmdesktop.desktop
