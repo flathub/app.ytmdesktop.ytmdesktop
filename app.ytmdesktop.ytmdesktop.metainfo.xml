@@ -2,11 +2,16 @@
 <component type="desktop-application">
   <id>app.ytmdesktop.ytmdesktop</id>
   
-  <name>ytmdesktop</name>
+  <name>YTMDesktop</name>
   <summary>Free cross platform Desktop Player for YouTube Music</summary>
-  
+  <developer_name>YTMDesktop Team</developer_name>
+
+  <url type="homepage">https://ytmdesktop.app/</url>
+  <!-- Update the bugtracker link to upstream bugtracker when/if this Flatpak is verified -->
+  <url type="bugtracker">https://github.com/flathub/app.ytmdesktop.ytmdesktop/issues</url>
+
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>CC0-1.0</project_license>
+  <project_license>GPL-3.0</project_license>
 
   <content_rating type="oars-1.1"/>
 
@@ -22,63 +27,59 @@
       YTMDesktop have NO affiliation with Google or YouTube. YouTube Music are trademark of Google Inc.
     </p>
   </description>
-    <url type="homepage">https://ytmdesktop.app/</url>
+
+  <categories>
+    <category>AudioVideo</category>
+    <category>Utility</category>
+  </categories>
+
   <launchable type="desktop-id">app.ytmdesktop.ytmdesktop.desktop</launchable>
+
   <screenshots>
     <screenshot type="default">
-      <image>https://ytmdesktop.app/img/product/main_5.png</image>
+      <caption>A screenshot of the main interface</caption>
+      <image>https://ytmdesktop.app/img/product/main_v2.png</image>
     </screenshot>
     <screenshot>
-      <image>https://ytmdesktop.app/img/product/settings_5.png</image>
+      <caption>A screenshot of the settings menu</caption>
+      <image>https://ytmdesktop.app/img/product/settings_v2.png</image>
     </screenshot>
     <screenshot>
-      <image>https://ytmdesktop.app/img/product/miniplayer_hover.png</image>
+      <caption>A screenshot of the integrations settings menu</caption>
+      <image>https://ytmdesktop.app/img/product/settings_integrations_v2.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>A screenshot of the about menu</caption>
+      <image>https://ytmdesktop.app/img/product/settings_about_v2.png</image>
     </screenshot>
   </screenshots>
   <releases>
-    <release version="v2.0.5" date="2024-05-06">
-      <description>
-        <p>Fixed:</p>
-        <ul>
-          <li>Internal YouTube Music changes preventing the app from launching</li>
-          <li>Premium redirect fix for regions that require premium</li>
-          <li>Better player bar element selection for adding extra functionality such as sleep timer, add to library, and add to playlist</li>
-        </ul>
-      </description>
+    <release version="v2.0.5" type="stable" date="2024-05-06">
+      <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v2.0.5/</url>
     </release>
-    <release version="v1.13.0" date="2020-9-7">
-          <description>
-              <p>Add</p>
-              <p>
-              Notification when like and dislike song with hotkeys
-              Miniplayer open/close custom keys
-              Audio output switch on tray icon
-              Add to library and add to playlist on middle action bar
-              Option to enable/disable buttons inject on middle action bar
-              Add dialog box when copy link from youtube
-              Option to disable tray icon
-              Skip songs marked with thumb down
-              </p>
-              <p>Fix</p>
-              <p>     
-                Lyrics keep scrolling back to top
-                Remote control webpage, strange visual with multiples interfaces
-                Changelog always shows on startup
-                A JavaScript error occurred in the main process - unable to enter preferences
-                Error on changing next track button hotkey
-                Settings Dialogue shows on wrong monitor
-                Unable to resize from top left corner
-                Pause between songs
-              </p>
-              <p>Improve</p>
-              <p>
-                Remote Control
-                updateActivity (events when paused and change seekbar)
-                Thumbs up behavior [hotkeys] 
-                Disable shortcuts setting
-                Refine Simplified Chinese translation
-              </p>
-          </description>
-      </release>
+    <release version="v2.0.2" type="stable" date="2024-03-01">
+      <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v2.0.2/</url>
+    </release>
+    <release version="v2.0.1" type="stable" date="2024-02-20">
+      <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v2.0.1/</url>
+    </release>
+    <release version="v2.0.0" type="stable" date="2024-01-28">
+      <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v2.0.0/</url>
+    </release>
+    <release version="v1.13.0" type="stable" date="2020-09-07">
+      <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v1.13.0/</url>
+    </release>
+    <release version="v1.12.0" type="stable" date="2020-08-03">
+      <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v1.12.0/</url>
+    </release>
+    <release version="v1.11.0" type="stable" date="2020-06-17">
+      <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v1.11.0/</url>
+    </release>
+    <release version="v1.8.0" type="stable" date="2020-01-07">
+      <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v1.8.0/</url>
+    </release>
+    <release version="v1.5.3" type="stable" date="2019-12-02">
+      <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v1.5.3/</url>
+    </release>
   </releases>
 </component>
