@@ -24,6 +24,10 @@ finish-args:
   # Allow talking to Flatpak and native discord sockets.
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --filesystem=xdg-run/discord-ipc-0
+  # Allow access to appindicator icons
+  - --talk-name=org.ayatana
+  # Allow access to appindicator icons on KDE
+  - --talk-name=org.kde.StatusNotifierWatcher
 modules:
   - name: ytmdesktop
     buildsystem: simple
