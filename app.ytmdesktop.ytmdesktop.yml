@@ -21,8 +21,9 @@ finish-args:
   # Allow access to MPRIS controls.
   # Broken until https://github.com/ytmdesktop/ytmdesktop/pull/1359 is merged upstream.
   - --own-name=org.mpris.MediaPlayer2.ytmdesktop
-  # Allow talking to discord socket.
+  # Allow talking to Flatpak and native discord sockets.
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
+  - --filesystem=xdg-run/discord-ipc-0
 modules:
   - name: ytmdesktop
     buildsystem: simple
