@@ -18,16 +18,26 @@ finish-args:
   - --socket=pulseaudio
   # Required for hardware acceleration.
   - --device=dri
+  # Set XDG_CURRENT_DESKTOP to 'unity'
+  # This works around https://github.com/electron/electron/issues/39789
+  - --env=XDG_CURRENT_DESKTOP=unity
   # Allow access to MPRIS controls.
   # Broken until https://github.com/ytmdesktop/ytmdesktop/pull/1359 is merged upstream.
   - --own-name=org.mpris.MediaPlayer2.ytmdesktop
   # Allow talking to Flatpak and native discord sockets.
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --filesystem=xdg-run/discord-ipc-0
-  # Allow access to appindicator icons
-  - --talk-name=org.ayatana
+  # Allow access to Notifications socket
+  - --talk-name=org.freedesktop.Notifications
+  # Work around electron bug: https://github.com/electron/electron/issues/40461
+  - --env=NOTIFY_IGNORE_PORTAL=1
+  # Allow access to the Secrets socket (for safeStorage support)
+  # This is currently broken, as enabling the "gnome-libsecret" password store backend
+  # Breaks google logins, and doesn't work anyways.
+  #- --talk-name=org.freedesktop.secrets
   # Allow access to appindicator icons on KDE
   - --talk-name=org.kde.StatusNotifierWatcher
+rename-desktop-file: youtube-music-desktop-app.desktop
 modules:
   - name: ytmdesktop
     buildsystem: simple
@@ -36,16 +46,18 @@ modules:
       - bsdtar --to-stdout -xf youtube-music-desktop-app_*.deb data.* | bsdtar --strip-components 2 -xf -
       # Copy extracted bin and data directories to the deployment location.
       - cp -r lib/* ${FLATPAK_DEST}/lib
-      - cp -r share/* ${FLATPAK_DEST}/share/
-      # Cleanup upstream desktop file and pixmaps folder.
-      - rm ${FLATPAK_DEST}/share/applications/*
+      - cp -r share/* ${FLATPAK_DEST}/share
+      # Fixup upstream desktop file so it matches our metainfo.
+      - desktop-file-edit --set-key=Exec --set-value="start-ytmdesktop %U" $FLATPAK_DEST/share/applications/youtube-music-desktop-app.desktop
+      - desktop-file-edit --set-key=Icon --set-value="${FLATPAK_ID}" $FLATPAK_DEST/share/applications/youtube-music-desktop-app.desktop
+      - desktop-file-edit --set-key=Name --set-value="YTMDesktop" $FLATPAK_DEST/share/applications/youtube-music-desktop-app.desktop
+      # Cleanup pixmaps folder.
       - rm -rf ${FLATPAK_DEST}/share/pixmaps
       # Install upstream icon correctly.
       - install -Dm644 share/pixmaps/youtube-music-desktop-app.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png
       # Install Flatpak specific wrapper.
       - install -Dm755 start-ytmdesktop.sh ${FLATPAK_DEST}/bin/start-ytmdesktop
-      # Install Flatpak specific metainfo and desktop files.
-      - install -Dm644 app.ytmdesktop.ytmdesktop.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      # Install Flatpak specific metainfo.
       - install -Dm644 app.ytmdesktop.ytmdesktop.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
     sources:
       - type: file
@@ -73,16 +85,13 @@ modules:
         commands:
           - export TMPDIR=$XDG_RUNTIME_DIR/app/$FLATPAK_ID
           - WAYLAND_SOCKET=${WAYLAND_DISPLAY:-"wayland-0"}
-          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}" ]] then
-          -    FLAGS="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
+          - FLAGS="--password-store=basic"
+          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}" ]]; then
+          -   FLAGS="$FLAGS --enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
           - fi
           - for i in {0..9}; do
-          -    test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+          -   test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i
           - done
           - FLATPAK_HOST=1 zypak-wrapper.sh /app/lib/youtube-music-desktop-app/youtube-music-desktop-app $FLAGS "$@"
       - type: file
-        path: app.ytmdesktop.ytmdesktop.desktop
-      - type: file
         path: app.ytmdesktop.ytmdesktop.metainfo.xml
-    cleanup:
-      # Add bad future files here.
