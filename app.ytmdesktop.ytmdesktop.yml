@@ -18,6 +18,9 @@ finish-args:
   - --socket=pulseaudio
   # Required for hardware acceleration.
   - --device=dri
+  # Set XDG_CURRENT_DESKTOP to 'unity'
+  # This works around https://github.com/electron/electron/issues/39789
+  - --env=XDG_CURRENT_DESKTOP=unity
   # Allow access to MPRIS controls.
   # Broken until https://github.com/ytmdesktop/ytmdesktop/pull/1359 is merged upstream.
   - --own-name=org.mpris.MediaPlayer2.ytmdesktop
@@ -27,7 +30,9 @@ finish-args:
   # Allow access to Notifications socket
   - --talk-name=org.freedesktop.Notifications
   # Allow access to the Secrets socket (for safeStorage support)
-  - --talk-name=org.freedesktop.secrets
+  # This is currently broken, as enabling the "gnome-libsecret" password store backend
+  # Breaks google logins, and doesn't work anyways.
+  #- --talk-name=org.freedesktop.secrets
   # Allow access to appindicator icons on KDE
   - --talk-name=org.kde.StatusNotifierWatcher
 rename-desktop-file: youtube-music-desktop-app.desktop
@@ -78,7 +83,7 @@ modules:
         commands:
           - export TMPDIR=$XDG_RUNTIME_DIR/app/$FLATPAK_ID
           - WAYLAND_SOCKET=${WAYLAND_DISPLAY:-"wayland-0"}
-          - FLAGS="--password-store=gnome-libsecret"
+          - FLAGS="--password-store=basic"
           - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}" ]]; then
           -   FLAGS="$FLAGS --enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
           - fi
