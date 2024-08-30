@@ -24,8 +24,10 @@ finish-args:
   # Allow talking to Flatpak and native discord sockets.
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --filesystem=xdg-run/discord-ipc-0
-  # Allow access to appindicator icons
-  - --talk-name=org.ayatana
+  # Allow access to Notifications socket
+  - --talk-name=org.freedesktop.Notifications
+  # Allow access to the Secrets socket (for safeStorage support)
+  - --talk-name=org.freedesktop.secrets
   # Allow access to appindicator icons on KDE
   - --talk-name=org.kde.StatusNotifierWatcher
 modules:
@@ -73,16 +75,15 @@ modules:
         commands:
           - export TMPDIR=$XDG_RUNTIME_DIR/app/$FLATPAK_ID
           - WAYLAND_SOCKET=${WAYLAND_DISPLAY:-"wayland-0"}
-          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}" ]] then
-          -    FLAGS="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
+          - FLAGS="--password-store=gnome-libsecret"
+          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}" ]]; then
+          -   FLAGS="$FLAGS --enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
           - fi
           - for i in {0..9}; do
-          -    test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+          -   test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i
           - done
           - FLATPAK_HOST=1 zypak-wrapper.sh /app/lib/youtube-music-desktop-app/youtube-music-desktop-app $FLAGS "$@"
       - type: file
         path: app.ytmdesktop.ytmdesktop.desktop
       - type: file
         path: app.ytmdesktop.ytmdesktop.metainfo.xml
-    cleanup:
-      # Add bad future files here.
