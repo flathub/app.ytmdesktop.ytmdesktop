@@ -29,6 +29,8 @@ finish-args:
   - --filesystem=xdg-run/discord-ipc-0
   # Allow access to Notifications socket
   - --talk-name=org.freedesktop.Notifications
+  # Work around electron bug: https://github.com/electron/electron/issues/40461
+  - --env=NOTIFY_IGNORE_PORTAL=1
   # Allow access to the Secrets socket (for safeStorage support)
   # This is currently broken, as enabling the "gnome-libsecret" password store backend
   # Breaks google logins, and doesn't work anyways.
