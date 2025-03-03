@@ -33,7 +33,8 @@ modules:
     buildsystem: simple
     build-commands:
       # Extract debian package.
-      - bsdtar --to-stdout -xf youtube-music-desktop-app_*.deb data.* | bsdtar --strip-components 2 -xf -
+      - bsdtar --to-stdout -xf youtube-music-desktop-app_*.deb data.* | bsdtar --strip-components
+        2 -xf -
       # Copy extracted bin and data directories to the deployment location.
       - cp -r lib/* ${FLATPAK_DEST}/lib
       - cp -r share/* ${FLATPAK_DEST}/share/
@@ -61,8 +62,8 @@ modules:
       - type: file
         only-arches:
           - aarch64
-        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.5/youtube-music-desktop-app_2.0.5_arm64.deb
-        sha512: e569e5bdf1cde30a47c94ac5914793bffb7b1d589f370e3c8881c5f25b47cce4fb897c0cb6108f12e933e3c03db1324d5af9ce06a1438988df864e57686d699d
+        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.7/youtube-music-desktop-app_2.0.7_arm64.deb
+        sha512: 92732a1c2fab1b98eebd6cac79e99ea00814e657a3e1da45ab7e2d40b908afad186d693317ae9174b58440e7d0b7360d5d0e3f03e75b164fad8be2994afd97c1
         x-checker-data:
           type: json
           url: https://api.github.com/repos/ytmdesktop/ytmdesktop/releases/latest
@@ -73,13 +74,15 @@ modules:
         commands:
           - export TMPDIR=$XDG_RUNTIME_DIR/app/$FLATPAK_ID
           - WAYLAND_SOCKET=${WAYLAND_DISPLAY:-"wayland-0"}
-          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}" ]] then
-          -    FLAGS="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
+          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}"
+            ]] then
+          - FLAGS="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
           - fi
           - for i in {0..9}; do
-          -    test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+          - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
           - done
-          - FLATPAK_HOST=1 zypak-wrapper.sh /app/lib/youtube-music-desktop-app/youtube-music-desktop-app $FLAGS "$@"
+          - FLATPAK_HOST=1 zypak-wrapper.sh /app/lib/youtube-music-desktop-app/youtube-music-desktop-app
+            $FLAGS "$@"
       - type: file
         path: app.ytmdesktop.ytmdesktop.desktop
       - type: file
