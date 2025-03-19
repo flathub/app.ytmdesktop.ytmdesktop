@@ -33,7 +33,8 @@ modules:
     buildsystem: simple
     build-commands:
       # Extract debian package.
-      - bsdtar --to-stdout -xf youtube-music-desktop-app_*.deb data.* | bsdtar --strip-components 2 -xf -
+      - bsdtar --to-stdout -xf youtube-music-desktop-app_*.deb data.* | bsdtar --strip-components
+        2 -xf -
       # Copy extracted bin and data directories to the deployment location.
       - cp -r lib/* ${FLATPAK_DEST}/lib
       - cp -r share/* ${FLATPAK_DEST}/share/
@@ -51,8 +52,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.5/youtube-music-desktop-app_2.0.5_amd64.deb
-        sha512: 75e329f2c758b218d31323c477a98eacac75aba85cf61960e344ff535d52a2769122c54db09ff2c82fb6c6461f23849ea5c3ba16cc8922a03fc1c323baa46441
+        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.8/youtube-music-desktop-app_2.0.8_amd64.deb
+        sha512: 46b53481f19bdf82655c13bc7752e6962224936e929346a2337ddb55d9654632503b5f1849890449faf73529fbbd4e7e23ed31af112f67f9f9ed3197271a457c
         x-checker-data:
           type: json
           url: https://api.github.com/repos/ytmdesktop/ytmdesktop/releases/latest
@@ -61,8 +62,8 @@ modules:
       - type: file
         only-arches:
           - aarch64
-        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.5/youtube-music-desktop-app_2.0.5_arm64.deb
-        sha512: e569e5bdf1cde30a47c94ac5914793bffb7b1d589f370e3c8881c5f25b47cce4fb897c0cb6108f12e933e3c03db1324d5af9ce06a1438988df864e57686d699d
+        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.8/youtube-music-desktop-app_2.0.8_arm64.deb
+        sha512: eed2c54d251b4f5ffb0c04928f536ea01f268e40d900e546ae3ecf28615786ef08a57448fc6aef22ebfad89c5b044857a0123b13e9a05a10aa4a216ea23b230e
         x-checker-data:
           type: json
           url: https://api.github.com/repos/ytmdesktop/ytmdesktop/releases/latest
@@ -73,13 +74,15 @@ modules:
         commands:
           - export TMPDIR=$XDG_RUNTIME_DIR/app/$FLATPAK_ID
           - WAYLAND_SOCKET=${WAYLAND_DISPLAY:-"wayland-0"}
-          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}" ]] then
-          -    FLAGS="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
+          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}"
+            ]] then
+          - FLAGS="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto"
           - fi
           - for i in {0..9}; do
-          -    test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+          - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
           - done
-          - FLATPAK_HOST=1 zypak-wrapper.sh /app/lib/youtube-music-desktop-app/youtube-music-desktop-app $FLAGS "$@"
+          - FLATPAK_HOST=1 zypak-wrapper.sh /app/lib/youtube-music-desktop-app/youtube-music-desktop-app
+            $FLAGS "$@"
       - type: file
         path: app.ytmdesktop.ytmdesktop.desktop
       - type: file
