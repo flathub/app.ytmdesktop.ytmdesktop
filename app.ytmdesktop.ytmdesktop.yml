@@ -87,5 +87,3 @@ modules:
         path: app.ytmdesktop.ytmdesktop.desktop
       - type: file
         path: app.ytmdesktop.ytmdesktop.metainfo.xml
-    cleanup:
-      # Add bad future files here.
