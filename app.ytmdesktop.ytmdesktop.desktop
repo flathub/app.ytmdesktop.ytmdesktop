@@ -7,3 +7,4 @@ Type=Application
 Terminal=false
 Categories=AudioVideo;Utility
 Exec=start-ytmdesktop %U
+StartupWMClass=YouTube Music Desktop App
