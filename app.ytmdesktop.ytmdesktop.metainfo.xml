@@ -54,6 +54,9 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="v2.0.11" date="2026-02-12">
+      <description></description>
+    </release>
     <release version="v2.0.10" type="stable" date="2025-09-04">
       <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v2.0.10/</url>
     </release>
