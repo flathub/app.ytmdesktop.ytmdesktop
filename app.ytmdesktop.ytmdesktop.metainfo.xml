@@ -4,11 +4,13 @@
   
   <name>YTMDesktop</name>
   <summary>Free cross platform Desktop Player for YouTube Music</summary>
-  <developer_name>YTMDesktop Team</developer_name>
+  <developer id="app.ytmdesktop">
+    <name>YTMDesktop Team</name>
+  </developer>
 
-  <url type="homepage">https://ytmdesktop.app/</url>
-  <!-- Update the bugtracker link to upstream bugtracker when/if this Flatpak is verified -->
-  <url type="bugtracker">https://github.com/flathub/app.ytmdesktop.ytmdesktop/issues</url>
+  <url type="homepage">https://ytmdesktop.app</url>
+  <url type="bugtracker">https://github.com/ytmdesktop/ytmdesktop/issues</url>
+  <url type="vcs-browser">https://github.com/ytmdesktop/ytmdesktop</url>
 
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0</project_license>
@@ -22,16 +24,10 @@
   </recommends>
   
   <description>
-    <p>
-      YTMDesktop is a Free cross platform Desktop Player for YouTube Music.
-      YTMDesktop have NO affiliation with Google or YouTube. YouTube Music are trademark of Google Inc.
-    </p>
+    <p>**NOTE: This is a community package of YTMDesktop and not officially supported by YTMDesktop Team.**</p>
+    <p>YTMDesktop is a Free cross platform Desktop Player for YouTube Music.</p>
+    <p>YTMDesktop have NO affiliation with Google or YouTube. YouTube Music are trademark of Google Inc.</p>
   </description>
-
-  <categories>
-    <category>AudioVideo</category>
-    <category>Utility</category>
-  </categories>
 
   <launchable type="desktop-id">app.ytmdesktop.ytmdesktop.desktop</launchable>
 
