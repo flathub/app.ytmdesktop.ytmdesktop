@@ -54,8 +54,8 @@ modules:
       - type: file
         only-arches:
           - x86_64
-        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.10/youtube-music-desktop-app_2.0.10_amd64.deb
-        sha512: d787f19f878dc81b8efb9977e464da6b8924b1663090bdd4edfa302656a713171c5b65989e0a8db26b99600c6b362dfedc3c6b73ecde9b7331f81389dc0ed73c
+        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.11/youtube-music-desktop-app_2.0.11_amd64.deb
+        sha512: 2ee9894702790611564fdcacf15902e22580858c588caf406104fc50c59c88115399ee56b266ffa3df35f1ff9dd35c11a4c327f622f7b73cb2229f9ce4b24455
         x-checker-data:
           type: json
           url: https://api.github.com/repos/ytmdesktop/ytmdesktop/releases/latest
@@ -64,8 +64,8 @@ modules:
       - type: file
         only-arches:
           - aarch64
-        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.10/youtube-music-desktop-app_2.0.10_arm64.deb
-        sha512: b1e11fed33608b9010f2bc13f5ad33298a45b9e2c1e1bb343c785b5f5846693f6872a10453bdf542bbbb1db0be2daad3d531eb91a94b99e6c1634bf1ae0bf9eb
+        url: https://github.com/ytmdesktop/ytmdesktop/releases/download/v2.0.11/youtube-music-desktop-app_2.0.11_arm64.deb
+        sha512: 23c957c5b686c00dbf763680eee5b8120f7c81d139fb6ce30760c4835d5bf012c1a29badaad0fc2b3dd9206c8cff6d06f5eb327ee468a772187d1c7bc65a8c7e
         x-checker-data:
           type: json
           url: https://api.github.com/repos/ytmdesktop/ytmdesktop/releases/latest

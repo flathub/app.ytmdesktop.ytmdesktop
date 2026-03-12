@@ -38,22 +38,13 @@
   <screenshots>
     <screenshot type="default">
       <caption>A screenshot of the main interface</caption>
-      <image>https://ytmdesktop.app/img/product/main_v2.png</image>
-    </screenshot>
-    <screenshot>
-      <caption>A screenshot of the settings menu</caption>
-      <image>https://ytmdesktop.app/img/product/settings_v2.png</image>
-    </screenshot>
-    <screenshot>
-      <caption>A screenshot of the integrations settings menu</caption>
-      <image>https://ytmdesktop.app/img/product/settings_integrations_v2.png</image>
-    </screenshot>
-    <screenshot>
-      <caption>A screenshot of the about menu</caption>
-      <image>https://ytmdesktop.app/img/product/settings_about_v2.png</image>
+      <image>https://ytmdesktop.app/assets/product.png</image>
     </screenshot>
   </screenshots>
   <releases>
+    <release version="v2.0.11" type="stable" date="2026-02-12">
+      <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v2.0.11/</url>
+    </release>
     <release version="v2.0.10" type="stable" date="2025-09-04">
       <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v2.0.10/</url>
     </release>
