@@ -78,4 +78,10 @@
       <url>https://github.com/ytmdesktop/ytmdesktop/releases/tag/v1.5.3/</url>
     </release>
   </releases>
+  <keywords>
+    <keyword>music player</keyword>
+    <keyword>youtube music player</keyword>
+    <keyword>desktop youtube</keyword>
+    <keyword>ytmdesktop</keyword>
+  </keywords>
 </component>
