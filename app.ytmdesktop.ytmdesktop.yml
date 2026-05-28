@@ -30,6 +30,9 @@ finish-args:
   - --talk-name=org.ayatana
   # Allow access to appindicator icons on KDE
   - --talk-name=org.kde.StatusNotifierWatcher
+  # Allow access to KWallet/gnome-keyring/KeePassXC etc for Electron safeStorage
+  - --talk-name=org.freedesktop.secrets
+  - --talk-name=org.kde.kwalletd6
 modules:
   - name: ytmdesktop
     buildsystem: simple
