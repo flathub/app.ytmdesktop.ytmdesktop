@@ -20,6 +20,8 @@ finish-args:
   - --device=dri
   # Allow access to MPRIS controls.
   - --own-name=org.mpris.MediaPlayer2.ytmdesktop
+  # Hack to get MPRIS working until above name is used.
+  - --own-name=org.mpris.MediaPlayer2.chromium.instance13
   # Allow talking to Flatpak and native discord sockets.
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --filesystem=xdg-run/discord-ipc-0
