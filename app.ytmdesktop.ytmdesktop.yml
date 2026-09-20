@@ -1,6 +1,6 @@
 app-id: app.ytmdesktop.ytmdesktop
 runtime: org.freedesktop.Platform
-runtime-version: &runtime-version '25.08'
+runtime-version: &runtime-version "26.08"
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
 base-version: *runtime-version
@@ -19,10 +19,7 @@ finish-args:
   # Required for hardware acceleration.
   - --device=dri
   # Allow access to MPRIS controls.
-  # Broken until https://github.com/ytmdesktop/ytmdesktop/pull/1359 is merged upstream.
   - --own-name=org.mpris.MediaPlayer2.ytmdesktop
-  # Hack to get MPRIS working until above name is used.
-  - --own-name=org.mpris.MediaPlayer2.chromium.instance13
   # Allow talking to Flatpak and native discord sockets.
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --filesystem=xdg-run/discord-ipc-0
@@ -30,6 +27,8 @@ finish-args:
   - --talk-name=org.ayatana
   # Allow access to appindicator icons on KDE
   - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=org.freedesktop.secrets
+  - --talk-name=org.kde.kwalletd6
 modules:
   - name: ytmdesktop
     buildsystem: simple
@@ -76,8 +75,7 @@ modules:
         commands:
           - export TMPDIR=$XDG_RUNTIME_DIR/app/$FLATPAK_ID
           - WAYLAND_SOCKET=${WAYLAND_DISPLAY:-"wayland-0"}
-          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}"
-            ]] then
+          - if [[ -e "$XDG_RUNTIME_DIR/${WAYLAND_SOCKET}" || -e "${WAYLAND_DISPLAY}" ]] then
           - FLAGS="--ozone-platform=wayland"
           - fi
           - for i in {0..9}; do
