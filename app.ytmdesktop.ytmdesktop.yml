@@ -83,6 +83,7 @@ modules:
           - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
           - done
           - FLATPAK_HOST=1 zypak-wrapper.sh /app/lib/youtube-music-desktop-app/youtube-music-desktop-app
+            --enable-features=DbusSecretPortal,SecretPortalKeyProviderUseForEncryption
             $FLAGS "$@"
       - type: file
         path: app.ytmdesktop.ytmdesktop.desktop
